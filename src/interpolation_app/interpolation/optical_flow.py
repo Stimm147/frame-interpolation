@@ -18,8 +18,7 @@ class OpticalFlowInterpolator(Interpolator):
         self.alpha = alpha
         self.use_multiscale = use_multiscale
 
-        # Use best quality DIS Optical Flow preset
-        self.dis = cv2.DISOpticalFlow_create(preset=2)  # 2 = medium (best quality)
+        self.dis = cv2.DISOpticalFlow_create(preset=2)
         self.dis.setUseSpatialPropagation(True)
 
     def interpolate(self, frame1: np.ndarray, frame2: np.ndarray) -> np.ndarray:
@@ -34,28 +33,23 @@ class OpticalFlowInterpolator(Interpolator):
             gray1 = cv2.GaussianBlur(gray1, (5, 5), 1.5)
             gray2 = cv2.GaussianBlur(gray2, (5, 5), 1.5)
 
-        # Calculate forward and backward flows
         flow_fw = self.dis.calc(gray1, gray2, None)
         flow_bw = self.dis.calc(gray2, gray1, None)
 
         flow_fw_half = flow_fw * self.alpha
         flow_bw_half = flow_bw * self.alpha
 
-        # Create mapping grids
         grid_x, grid_y = np.meshgrid(np.arange(w), np.arange(h))
         grid_x = grid_x.astype(np.float32)
         grid_y = grid_y.astype(np.float32)
 
-        # Warp frame1 forward
         map_x_fw = grid_x + flow_fw_half[..., 0]
         map_y_fw = grid_y + flow_fw_half[..., 1]
         warped1 = cv2.remap(frame1, map_x_fw, map_y_fw, interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT)
 
-        # Warp frame2 backward
         map_x_bw = grid_x - flow_bw_half[..., 0]
         map_y_bw = grid_y - flow_bw_half[..., 1]
         warped2 = cv2.remap(frame2, map_x_bw, map_y_bw, interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT)
 
-        # Blend
         blended = (1 - self.alpha) * warped1.astype(np.float32) + self.alpha * warped2.astype(np.float32)
         return np.clip(blended, 0, 255).astype(np.uint8)
