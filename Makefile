@@ -9,6 +9,9 @@ run-weighted:
 run-morphing:
 	set PYTHONPATH=src && poetry run python src/interpolation_app/evaluators/evaluate_morphing.py
 
+run-optical-flow:
+	set PYTHONPATH=src && poetry run python src/interpolation_app/evaluators/evaluate_optical_flow.py
+
 test:
 	poetry run pytest tests
 

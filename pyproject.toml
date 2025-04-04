@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "frame-interpolation"
-version = "0.4.0"
+version = "0.5.0"
 description = ""
 authors = ["Stimm147 <michalczewski0@gmail.com>"]
 readme = "README.md"
