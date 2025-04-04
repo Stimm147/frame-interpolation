@@ -475,22 +475,6 @@ xml = ["defusedxml", "lxml"]
 zarr = ["fsspec", "zarr (<3)"]
 
 [[package]]
-name = "torch"
-version = "2.6.0+cu118"
-description = "Tensors and Dynamic neural networks in Python with strong GPU acceleration"
-optional = false
-python-versions = "*"
-files = []
-
-[[package]]
-name = "torchvision"
-version = "0.21.0+cu118"
-description = "image and video datasets and models for torch deep learning"
-optional = false
-python-versions = "*"
-files = []
-
-[[package]]
 name = "tqdm"
 version = "4.67.1"
 description = "Fast, Extensible Progress Meter"
@@ -525,4 +509,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "bece4d9e59623672265f305011b9abdb04724984ad7eb068a9ce6a711876ee3a"
+content-hash = "91d08e3b7a2934d95381d24686cb2290de0407b940835ea525ef5cc3778aa0b0"

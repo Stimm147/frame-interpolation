@@ -6,3 +6,6 @@ run:
 test:
 	poetry run pytest tests
 
+format:
+	poetry run ruff format src tests
+	poetry run black src tests
