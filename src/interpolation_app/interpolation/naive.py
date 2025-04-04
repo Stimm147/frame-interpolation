@@ -7,4 +7,6 @@ logger = get_logger(__name__)
 
 class NaiveInterpolator(Interpolator):
     def interpolate(self, frame1: np.ndarray, frame2: np.ndarray) -> np.ndarray:
-        return ((frame1.astype(np.float32) + frame2.astype(np.float32)) / 2).astype(np.uint8)
+        return ((frame1.astype(np.float32) + frame2.astype(np.float32)) / 2).astype(
+            np.uint8
+        )

@@ -1,11 +1,13 @@
 .PHONY: run test
 
-run:
-	set PYTHONPATH=src && poetry run python -m interpolation_app.evaluate_naive_interpolator
+run-naive:
+	set PYTHONPATH=src && poetry run python src/interpolation_app/evaluators/evaluate_naive.py
+
+run-weighted:
+	set PYTHONPATH=src && poetry run python src/interpolation_app/evaluators/evaluate_weighted.py
 
 test:
 	poetry run pytest tests
 
 format:
 	poetry run ruff format src tests
-	poetry run black src tests
