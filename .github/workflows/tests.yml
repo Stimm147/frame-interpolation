@@ -8,9 +8,7 @@ on:
 
 jobs:
   test:
-    name: Run tests, lint and version check
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -29,7 +27,11 @@ jobs:
         run: |
           poetry install
 
-      - name: Run pytest
+      - name: Install CPU torch manually
+        run: |
+          poetry run pip install torch torchvision
+
+      - name: Run tests
         run: |
           poetry run pytest tests
 
