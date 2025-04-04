@@ -6,6 +6,9 @@ run-naive:
 run-weighted:
 	set PYTHONPATH=src && poetry run python src/interpolation_app/evaluators/evaluate_weighted.py
 
+run-morphing:
+	set PYTHONPATH=src && poetry run python src/interpolation_app/evaluators/evaluate_morphing.py
+
 test:
 	poetry run pytest tests
 
