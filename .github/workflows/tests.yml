@@ -1,0 +1,55 @@
+name: CI – Tests, Lint, Version check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Install dependencies
+        run: |
+          poetry install
+
+      - name: Install CPU torch manually
+        run: |
+          poetry run pip install torch torchvision
+
+      - name: Run tests
+        run: |
+          poetry run pytest tests
+
+      - name: Check code style with ruff
+        run: |
+          poetry run ruff check src tests
+
+      - name: Ensure pyproject.toml version is bumped (pull request only)
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch origin main
+          VERSION_BEFORE=$(git show origin/main:pyproject.toml | grep '^version' | head -1)
+          VERSION_AFTER=$(grep '^version' pyproject.toml | head -1)
+          echo "Before: $VERSION_BEFORE"
+          echo "After:  $VERSION_AFTER"
+          if [ "$VERSION_BEFORE" == "$VERSION_AFTER" ]; then
+            echo "❌ pyproject.toml version was not bumped!"
+            exit 1
+          else
+            echo "✅ Version bumped!"
+          fi

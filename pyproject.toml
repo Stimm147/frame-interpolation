@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "frame-interpolation"
-version = "0.1.0"
+version = "0.2.0"
 description = ""
 authors = ["Stimm147 <michalczewski0@gmail.com>"]
 readme = "README.md"
@@ -10,7 +10,17 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.12"
+numpy = "^2.2.4"
+opencv-python = "^4.11.0.86"
+scikit-image = "^0.25.2"
+lazy-loader = "^0.4"
+typing-extensions = "^4.13.1"
+tqdm = "^4.67.1"
 
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.11.3"
+pytest = "^8.3.5"
 
 [build-system]
 requires = ["poetry-core"]
