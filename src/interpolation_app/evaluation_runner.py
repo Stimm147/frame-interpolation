@@ -2,7 +2,8 @@ from pathlib import Path
 import cv2
 from tqdm import tqdm
 from torch.utils.data import DataLoader
-from interpolation_app.interpolation.naive import NaiveInterpolator
+
+from interpolation_app.interpolation.base import Interpolator
 from interpolation_app.utils.triplet_dataset import TripletDataset
 from interpolation_app.utils.image_utils import ImageEvaluator
 from interpolation_app.logger import get_logger
@@ -10,20 +11,17 @@ from interpolation_app.logger import get_logger
 logger = get_logger(__name__)
 
 
-def main():
+def run_evaluation(interpolator: Interpolator, output_dir: Path) -> None:
     ROOT = Path.cwd()
     dataset_dir = ROOT / "data" / "triplet_dataset"
-    output_dir = ROOT / "results" / "naive"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     dataset = TripletDataset(dataset_dir)
     dataloader = DataLoader(dataset, batch_size=1, shuffle=False)
 
-    interpolator = NaiveInterpolator()
+    logger.info(f"Starting evaluation on {len(dataset)} sequences...\n")
 
     ssim_total, psnr_total, count = 0.0, 0.0, 0
-
-    logger.info(f"Starting evaluation on {len(dataset)} sequences...\n")
 
     for sample in tqdm(dataloader, desc="Evaluating"):
         name = sample["name"][0]
@@ -50,7 +48,3 @@ def main():
     logger.info(f"Processed sequences: {count}")
     logger.info(f"Average SSIM: {avg_ssim:.4f}")
     logger.info(f"Average PSNR: {avg_psnr:.2f} dB")
-
-
-if __name__ == "__main__":
-    main()
