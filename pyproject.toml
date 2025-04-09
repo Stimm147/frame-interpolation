@@ -16,6 +16,8 @@ scikit-image = "^0.25.2"
 lazy-loader = "^0.4"
 typing-extensions = "^4.13.1"
 tqdm = "^4.67.1"
+lightning = {extras = ["extra"], version = "^2.5.1"}
+kornia = "^0.8.0"
 
 
 [tool.poetry.group.dev.dependencies]
