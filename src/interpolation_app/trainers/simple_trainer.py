@@ -6,7 +6,7 @@ from interpolation_app.datasets.triplet_module import TripletDataModule
 
 
 def train():
-    model = SimpleCNNInterpolator(loss_type="ssim", lr=1e-4)
+    model = SimpleCNNInterpolator(loss_type="ssim", lr=1e-4, depth="shallow")
     data = TripletDataModule()
 
     checkpoint_callback = ModelCheckpoint(

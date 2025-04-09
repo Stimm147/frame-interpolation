@@ -9,7 +9,7 @@ class TripletDataModule(pl.LightningDataModule):
     def __init__(
         self,
         data_dir: str = "data/triplet_dataset",
-        batch_size: int = 10,
+        batch_size: int = 5,
         num_workers: int = 2,
     ):
         super().__init__()

@@ -175,3 +175,4 @@ cython_debug/
 data/triplet_dataset
 results
 lightning_logs
+checkpoints
