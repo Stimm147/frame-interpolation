@@ -15,9 +15,15 @@ class DeepCNNInterpolator(Interpolator):
 
     def interpolate(self, frame1: np.ndarray, frame2: np.ndarray) -> np.ndarray:
         with torch.no_grad():
-            tensor1 = torch.from_numpy(frame1).permute(2, 0, 1).unsqueeze(0).float() / 255.0
-            tensor2 = torch.from_numpy(frame2).permute(2, 0, 1).unsqueeze(0).float() / 255.0
+            tensor1 = (
+                torch.from_numpy(frame1).permute(2, 0, 1).unsqueeze(0).float() / 255.0
+            )
+            tensor2 = (
+                torch.from_numpy(frame2).permute(2, 0, 1).unsqueeze(0).float() / 255.0
+            )
             x = torch.cat([tensor1, tensor2], dim=1).to(self.device)
             output = self.model(x).clamp(0, 1)
-            output = (output.squeeze().permute(1, 2, 0).cpu().numpy() * 255).astype(np.uint8)
+            output = (output.squeeze().permute(1, 2, 0).cpu().numpy() * 255).astype(
+                np.uint8
+            )
             return output

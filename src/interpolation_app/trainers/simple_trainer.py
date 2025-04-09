@@ -23,7 +23,7 @@ def train():
         max_epochs=30,
         accelerator="auto",
         enable_progress_bar=True,
-        callbacks=[checkpoint_callback]
+        callbacks=[checkpoint_callback],
     )
 
     trainer.fit(model, datamodule=data)

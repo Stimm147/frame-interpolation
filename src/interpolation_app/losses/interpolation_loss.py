@@ -11,8 +11,9 @@ class PerceptualLoss(nn.Module):
         for param in vgg.parameters():
             param.requires_grad = False
         self.vgg = vgg.eval()
-        self.transform = transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                              std=[0.229, 0.224, 0.225])
+        self.transform = transforms.Normalize(
+            mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
+        )
 
     def forward(self, pred, target):
         pred = self.transform(pred)

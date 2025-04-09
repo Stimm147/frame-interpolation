@@ -45,11 +45,25 @@ class OpticalFlowInterpolator(Interpolator):
 
         map_x_fw = grid_x + flow_fw_half[..., 0]
         map_y_fw = grid_y + flow_fw_half[..., 1]
-        warped1 = cv2.remap(frame1, map_x_fw, map_y_fw, interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT)
+        warped1 = cv2.remap(
+            frame1,
+            map_x_fw,
+            map_y_fw,
+            interpolation=cv2.INTER_LINEAR,
+            borderMode=cv2.BORDER_REFLECT,
+        )
 
         map_x_bw = grid_x - flow_bw_half[..., 0]
         map_y_bw = grid_y - flow_bw_half[..., 1]
-        warped2 = cv2.remap(frame2, map_x_bw, map_y_bw, interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT)
+        warped2 = cv2.remap(
+            frame2,
+            map_x_bw,
+            map_y_bw,
+            interpolation=cv2.INTER_LINEAR,
+            borderMode=cv2.BORDER_REFLECT,
+        )
 
-        blended = (1 - self.alpha) * warped1.astype(np.float32) + self.alpha * warped2.astype(np.float32)
+        blended = (1 - self.alpha) * warped1.astype(
+            np.float32
+        ) + self.alpha * warped2.astype(np.float32)
         return np.clip(blended, 0, 255).astype(np.uint8)

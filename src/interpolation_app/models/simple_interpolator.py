@@ -60,7 +60,13 @@ class SimpleCNNInterpolator(pl.LightningModule):
         y = batch["ground_truth"]
         y_hat = self(x)
         loss = self.loss_fn(y_hat, y)
-        self.log("train_loss", loss, on_step=False, on_epoch=True, batch_size=batch["before"].size(0))
+        self.log(
+            "train_loss",
+            loss,
+            on_step=False,
+            on_epoch=True,
+            batch_size=batch["before"].size(0),
+        )
         return loss
 
     def validation_step(self, batch, batch_idx):
@@ -68,18 +74,24 @@ class SimpleCNNInterpolator(pl.LightningModule):
         y = batch["ground_truth"]
         y_hat = self(x)
         loss = self.loss_fn(y_hat, y)
-        self.log("val_loss", loss, on_step=False, on_epoch=True, batch_size=batch["before"].size(0))
+        self.log(
+            "val_loss",
+            loss,
+            on_step=False,
+            on_epoch=True,
+            batch_size=batch["before"].size(0),
+        )
 
     def configure_optimizers(self):
         optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
             optimizer,
-            mode='min',
+            mode="min",
             factor=0.5,
             patience=3,
             min_lr=1e-6,
             threshold=1e-3,
-            threshold_mode='rel'
+            threshold_mode="rel",
         )
         return {
             "optimizer": optimizer,
@@ -87,6 +99,6 @@ class SimpleCNNInterpolator(pl.LightningModule):
                 "scheduler": scheduler,
                 "monitor": "val_loss",
                 "interval": "epoch",
-                "frequency": 1
-            }
+                "frequency": 1,
+            },
         }

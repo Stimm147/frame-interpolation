@@ -21,7 +21,9 @@ class MorphingInterpolator(Interpolator):
         self.method = method.upper()
         self.max_matches = max_matches
 
-        logger.info(f"MorphingInterpolator initialized with alpha={self.alpha}, method={self.method}, max_matches={self.max_matches}")
+        logger.info(
+            f"MorphingInterpolator initialized with alpha={self.alpha}, method={self.method}, max_matches={self.max_matches}"
+        )
 
         if self.method == "ORB":
             self.detector = cv2.ORB_create()
@@ -43,16 +45,22 @@ class MorphingInterpolator(Interpolator):
 
         if des1 is None or des2 is None or len(kp1) < 3 or len(kp2) < 3:
             logger.warning("Not enough keypoints detected, falling back to blending.")
-            return ((1 - self.alpha) * frame1.astype(np.float32) + self.alpha * frame2.astype(np.float32)).astype(np.uint8)
+            return (
+                (1 - self.alpha) * frame1.astype(np.float32)
+                + self.alpha * frame2.astype(np.float32)
+            ).astype(np.uint8)
 
         matches = self.matcher.match(des1, des2)
         matches = sorted(matches, key=lambda m: m.distance)
 
         if len(matches) < 3:
             logger.warning("Not enough matches found, falling back to blending.")
-            return ((1 - self.alpha) * frame1.astype(np.float32) + self.alpha * frame2.astype(np.float32)).astype(np.uint8)
+            return (
+                (1 - self.alpha) * frame1.astype(np.float32)
+                + self.alpha * frame2.astype(np.float32)
+            ).astype(np.uint8)
 
-        matches = matches[:self.max_matches]
+        matches = matches[: self.max_matches]
 
         pts1 = np.float32([kp1[m.queryIdx].pt for m in matches])
         pts2 = np.float32([kp2[m.trainIdx].pt for m in matches])
@@ -64,7 +72,10 @@ class MorphingInterpolator(Interpolator):
 
         if mat1 is None or mat2 is None:
             logger.warning("Affine estimation failed, falling back to blending.")
-            return ((1 - self.alpha) * frame1.astype(np.float32) + self.alpha * frame2.astype(np.float32)).astype(np.uint8)
+            return (
+                (1 - self.alpha) * frame1.astype(np.float32)
+                + self.alpha * frame2.astype(np.float32)
+            ).astype(np.uint8)
 
         warp1 = cv2.warpAffine(frame1, mat1, (w, h))
         warp2 = cv2.warpAffine(frame2, mat2, (w, h))
